@@ -73,11 +73,16 @@ const InvoiceList = () => {
 
   const handleSendReminder = async (invoiceId) => {
     console.log("Sending reminder for invoice ID:", invoiceId); // Debug log
-    if (sendingReminder) return;
+    if (sendingReminder) {
+      console.log("Already sending a reminder, exiting."); // Debug log
+      return;
+    }
 
     setSendingReminder(true);
     try {
-      const invoice = invoices.find(inv => inv.invoiceId === invoiceId);
+      console.log("Current invoices:", invoices); // Log current invoices
+      const invoice = invoices.find(inv => inv._id === invoiceId);
+      console.log("Found invoice:", invoice); // Debug log
       if (!invoice || !invoice.recipientEmail) {
         toast.error("Recipient email is missing or invalid for the selected invoice");
         return;
@@ -199,7 +204,7 @@ const InvoiceList = () => {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    ${invoice.amount}
+                    {invoice.amount}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(invoice.dueDate).toLocaleDateString()}
@@ -219,7 +224,7 @@ const InvoiceList = () => {
                         Delete
                       </button>
                       <button
-                        onClick={() => handleSendReminder(invoice.invoiceId)}
+                        onClick={() => handleSendReminder(invoice._id)}
                         disabled={sendingReminder}
                         className={`px-4 py-2 text-sm text-white rounded ${
                           sendingReminder 

@@ -18,9 +18,9 @@ const OverdueInvoices = () => {
     fetchOverdueInvoices();
   }, []);
 
-  const handleTriggerOverdueNotifications = async () => {
+  const handleTriggerOverdueNotifications = async (recipientEmail) => {
     try {
-      const response = await triggerOverdueNotifications();
+      const response = await triggerOverdueNotifications(recipientEmail);
       if (response.error) {
         toast.error(response.error);
       } else if (response.notifiedInvoices?.length > 0) {
@@ -39,7 +39,7 @@ const OverdueInvoices = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Overdue Invoices</h1>
         <button
-          onClick={handleTriggerOverdueNotifications}
+          onClick={() => handleTriggerOverdueNotifications("")}
           className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
         >
           Send All Overdue Notifications
@@ -51,8 +51,15 @@ const OverdueInvoices = () => {
             <strong>Invoice ID:</strong> {invoice.invoiceId}
           </p>
           <p>
-            <strong>Recipient:</strong> {invoice.recipient}
+            <strong>Recipient:</strong> {invoice.recipient || 'No recipient defined'}
           </p>
+          <button
+            onClick={() => invoice.recipient && handleTriggerOverdueNotifications(invoice.recipient)}
+            className={`px-4 py-2 ${invoice.recipient ? 'bg-red-500 hover:bg-red-600' : 'bg-gray-400 cursor-not-allowed'} text-white rounded`}
+            disabled={!invoice.recipient}
+          >
+            Send Overdue Notification
+          </button>
         </div>
       ))}
     </div>

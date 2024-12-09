@@ -3,7 +3,7 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 
 const EditInvoice = () => {
-  const { id } = useParams(); // ID from the route
+  const { id } = useParams(); 
   const [invoice, setInvoice] = useState({});
   const [recipient, setRecipient] = useState("");
   const [status, setStatus] = useState("Pending");
